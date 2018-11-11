@@ -2344,7 +2344,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
     function Setup() {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _this = this;
-            var manualKey, watchedQueuesEnabled, postDetails;
+            var manualKey, auditDetectionEnabled, watchedQueuesEnabled, postDetails;
             return tslib_1.__generator(this, function (_a) {
                 manualKey = localStorage.getItem(metaSmokeManualKey);
                 if (manualKey) {
@@ -2359,6 +2359,22 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 SetupPostPage();
                 SetupStyles();
                 Configuration_1.SetupConfiguration();
+                auditDetectionEnabled = GreaseMonkeyCache_1.GreaseMonkeyCache.GetFromCache(exports.ConfigurationDetectAudits);
+                if (auditDetectionEnabled) {
+                    RequestWatcher_1.WatchRequests().subscribe(function (xhr) {
+                        var isReviewItem = /(\/review\/next-task)|(\/review\/task-reviewed\/)/.exec(xhr.responseURL);
+                        if (isReviewItem !== null && xhr.status === 200) {
+                            var review = JSON.parse(xhr.responseText);
+                            if (review.isAudit) {
+                                displayToaster('Beware! This is an audit!', '#cce5ff', '#004085', 5000);
+                                $('.review-actions').hide();
+                                setTimeout(function () {
+                                    $('.review-actions').show();
+                                }, 5000);
+                            }
+                        }
+                    });
+                }
                 document.body.appendChild(popupWrapper.get(0));
                 watchedQueuesEnabled = GreaseMonkeyCache_1.GreaseMonkeyCache.GetFromCache(exports.ConfigurationWatchQueues);
                 postDetails = [];
@@ -5385,7 +5401,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                         createConfigCheckbox('Watch for manual flags', AdvancedFlagging_1.ConfigurationWatchFlags),
                         createConfigCheckbox('Watch for queue responses', AdvancedFlagging_1.ConfigurationWatchQueues),
                         createConfigCheckbox('Disable AdvancedFlagging link', AdvancedFlagging_1.ConfigurationLinkDisabled),
-			createConfigCheckbox('Detect audits', AdvancedFlagging_1.ConfigurationDetectAudits),
+                        createConfigCheckbox('Detect audits', AdvancedFlagging_1.ConfigurationDetectAudits),
                         createConfigCheckbox('Uncheck \'flag\' by default', AdvancedFlagging_1.ConfigurationDefaultNoFlag)
                     ])];
             });
