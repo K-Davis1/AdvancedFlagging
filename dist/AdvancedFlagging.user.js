@@ -5385,6 +5385,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                         createConfigCheckbox('Watch for manual flags', AdvancedFlagging_1.ConfigurationWatchFlags),
                         createConfigCheckbox('Watch for queue responses', AdvancedFlagging_1.ConfigurationWatchQueues),
                         createConfigCheckbox('Disable AdvancedFlagging link', AdvancedFlagging_1.ConfigurationLinkDisabled),
+			createConfigCheckbox('Detect audits', AdvancedFlagging_1.ConfigurationDetectAudits),
                         createConfigCheckbox('Uncheck \'flag\' by default', AdvancedFlagging_1.ConfigurationDefaultNoFlag)
                     ])];
             });
